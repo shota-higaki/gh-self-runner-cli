@@ -1,0 +1,113 @@
+# ===================================
+# Dependencies & Package Management
+# ===================================
+node_modules/
+.npm/
+.yarn/
+.pnp.*
+.bun/
+
+# Lock files (we use bun.lock, so ignore others)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Bun specific
+bun.lockb
+
+# ===================================
+# Build & Compilation
+# ===================================
+dist/
+build/
+out/
+/lib/
+
+# TypeScript
+*.tsbuildinfo
+.tsc-cache/
+
+# ===================================
+# Testing & Coverage
+# ===================================
+coverage/
+coverage.json
+.nyc_output/
+*.lcov
+
+# ===================================
+# Logs & Debug
+# ===================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun-debug.log*
+lerna-debug.log*
+
+# ===================================
+# Runtime & Process
+# ===================================
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# ===================================
+# Environment & Configuration
+# ===================================
+.env
+.env.local
+.env.*.local
+
+# ===================================
+# IDE & Editor
+# ===================================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# ===================================
+# OS Generated Files
+# ===================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ===================================
+# Tool Specific
+# ===================================
+# Linters & Formatters
+.eslintcache
+.stylelintcache
+.biome
+
+# Yalc
+.yalc/
+yalc.lock
+
+# ===================================
+# Temporary Files
+# ===================================
+tmp/
+temp/
+*.tmp
+*.temp
+
+# ===================================
+# GitHub Self-Hosted Runners
+# ===================================
+.github/self-hosted-runners/
+.runners/
+runner-config/
+_work/

@@ -1,0 +1,94 @@
+{
+  "name": "gh-self-runner-cli",
+  "version": "0.1.0",
+  "description": "Dynamic GitHub Self-Hosted Runners management tool",
+  "type": "module",
+  "author": "Shota Higaki <shota-higaki@users.noreply.github.com>",
+  "license": "MIT",
+  "funding": "https://github.com/shota-higaki/gh-self-runner-cli?sponsor=1",
+  "homepage": "https://github.com/shota-higaki/gh-self-runner-cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shota-higaki/gh-self-runner-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shota-higaki/gh-self-runner-cli/issues"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "gh-self-runner-cli": "./dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "docs/CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "format": "bun run lint:fix",
+    "lint": "biome check src tests",
+    "lint:fix": "biome check --write src tests",
+    "prepare": "simple-git-hooks",
+    "prepublishOnly": "bun run build",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "test:watch": "vitest --watch",
+    "typecheck": "tsc --noEmit",
+    "sync:versions": ".github/scripts/sync-versions.sh",
+    "dev": "tsup --watch",
+    "check": "bun run lint && bun run typecheck && bun run test && bun run build"
+  },
+  "keywords": [
+    "github",
+    "actions",
+    "runner",
+    "self-hosted",
+    "github-actions",
+    "devops",
+    "cli"
+  ],
+  "engines": {
+    "node": ">=22.0.0",
+    "bun": ">=1.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "@octokit/rest": "^22.0.0",
+    "commander": "^14.0.0",
+    "cosmiconfig": "^9.0.0",
+    "dotenv": "^16.5.0",
+    "picocolors": "^1.1.1",
+    "yaml": "^2.8.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.5",
+    "@types/node": "^24.0.4",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "lint-staged": "^16.1.2",
+    "simple-git-hooks": "^2.13.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "biome check --write"
+    ]
+  },
+  "simple-git-hooks": {
+    "pre-commit": "bunx lint-staged && bun run typecheck",
+    "pre-push": "bun run test && bun run build"
+  }
+}
