@@ -45,7 +45,7 @@ describe('CLI Integration Tests', () => {
         const execError = error as { stdout?: string; stderr?: string };
         output = execError.stdout || execError.stderr || '';
       }
-      expect(output).toContain('0.1.0');
+      expect(output).toContain('0.2.0');
     });
   });
 
