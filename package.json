@@ -1,6 +1,6 @@
 {
   "name": "gh-self-runner-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Dynamic GitHub Self-Hosted Runners management tool",
   "type": "module",
   "author": "Shota Higaki <shota-higaki@users.noreply.github.com>",

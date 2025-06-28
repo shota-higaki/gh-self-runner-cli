@@ -63,6 +63,7 @@ gh-self-runner-cli init
 
 You'll be prompted for:
 - Repository URL (e.g., `owner/repo` or `https://github.com/owner/repo`)
+- Configuration directory (default: `~/.config/gh-self-runner-cli`)
 - Authentication method (GitHub CLI or Personal Access Token)
 - Number of runners to create (default: 1)
 
@@ -159,12 +160,15 @@ Simply run `stop` followed by `start` to restart your runners.
 ### Want to remove everything?
 The `clean` command removes all configurations and runners.
 
+### Where are configurations stored?
+By default, configurations are stored in `~/.config/gh-self-runner-cli`. You can override this with the `GH_SELF_RUNNER_CONFIG_DIR` environment variable.
+
 ## Troubleshooting
 
 ### Runners won't start
 1. Verify your GitHub authentication is valid
 2. Check if self-hosted runners are enabled in your repository settings
-3. Review the log files in `.github/self-hosted-runners/runners/`
+3. Review the log files in your configuration directory
 4. Run with debug mode: `DEBUG=* gh-self-runner-cli start`
 
 ### Permission errors

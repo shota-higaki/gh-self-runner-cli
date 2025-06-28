@@ -1,14 +1,34 @@
 import path from 'path';
+import { getConfigDirectory, readConfigDirectoryReference } from './config-directory.js';
+
+/**
+ * Get the base directory for configuration
+ * First checks for a local reference file, then uses the global config directory
+ */
+export function getBaseDirectory(): string {
+  // Check if there's a local reference to a config directory
+  const referencedDir = readConfigDirectoryReference();
+  if (referencedDir) {
+    return referencedDir;
+  }
+
+  // Otherwise use the global config directory
+  return getConfigDirectory();
+}
 
 /**
  * Path constants for the GitHub self-hosted runners
  */
 export const PATHS = {
   // Base directory for all runner-related files
-  BASE_DIR: '.github/self-hosted-runners',
+  get BASE_DIR() {
+    return getBaseDirectory();
+  },
 
   // Configuration file
-  CONFIG_FILE: '.github/self-hosted-runners/config.yml',
+  get CONFIG_FILE() {
+    return path.join(this.BASE_DIR, 'config.yml');
+  },
 
   // Old paths (for migration)
   OLD_RUNNERS_DIR: '.runners',
@@ -19,7 +39,7 @@ export const PATHS = {
  * Get the runner directory path for a specific repository
  */
 export function getRunnerRepoDir(owner: string, repo: string): string {
-  return path.resolve(process.cwd(), PATHS.BASE_DIR, 'runners', `${owner}-${repo}`);
+  return path.resolve(PATHS.BASE_DIR, 'runners', `${owner}-${repo}`);
 }
 
 /**

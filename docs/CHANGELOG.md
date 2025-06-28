@@ -9,6 +9,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _No changes yet_
 
+## [0.2.0] - 2025-06-28
+
+### ⚠️ BREAKING CHANGES
+
+- Configuration files are now stored in a centralized directory (`~/.config/gh-self-runner-cli` by default) instead of the current working directory
+- The `.github/self-hosted-runners` directory is no longer created in the current working directory
+
+### ✨ Features
+
+#### Configuration Management
+- **Centralized Configuration**: Configuration files are now stored in `~/.config/gh-self-runner-cli` by default
+- **Custom Config Directory**: Users can specify a custom configuration directory during `init`
+- **Environment Variable Support**: Set `GH_SELF_RUNNER_CONFIG_DIR` to override the default location
+- **Repository Reference**: A `.github-self-runner-config` file is created in the repository to reference the configuration location
+
+### 🔄 Changes
+
+- Configuration is now stored outside of the repository by default to reduce noise
+- The init command now prompts for the configuration directory location
+- All commands now use the centralized configuration directory
+- The `.github-self-runner-config` reference file is automatically added to `.gitignore`
+
+### 📋 Migration Guide
+
+For users upgrading from v0.1.0:
+
+1. Run `gh-self-runner-cli init` in your repository
+2. Choose a configuration directory (default: `~/.config/gh-self-runner-cli`)
+3. Your configuration will be stored in the chosen directory
+4. A reference file will be created at `.github-self-runner-config`
+
+[0.2.0]: https://github.com/shota-higaki/gh-self-runner-cli/releases/tag/v0.2.0
+
 ## [0.1.0] - 2025-06-27
 
 ### 🎉 Initial Release

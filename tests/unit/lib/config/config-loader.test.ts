@@ -370,15 +370,16 @@ describe('ConfigLoader', () => {
 
   describe('cosmiconfig integration', () => {
     it('should configure cosmiconfig with correct search places', () => {
-      expect(cosmiconfig).toHaveBeenCalledWith('github-runners', {
-        searchPlaces: expect.arrayContaining([
-          '.github/self-hosted-runners/config.yml',
-          '.github-runners.yml',
-        ]),
-        loaders: expect.objectContaining({
-          '.yml': expect.any(Function),
-          '.yaml': expect.any(Function),
-        }),
+      // The first searchPlace is now dynamic based on config directory
+      // So we check that it includes 'config.yml' and the legacy path
+      const call = vi.mocked(cosmiconfig).mock.calls[0];
+      expect(call[0]).toBe('github-runners');
+      expect(call[1]?.searchPlaces).toHaveLength(2);
+      expect(call[1]?.searchPlaces[0]).toMatch(/config\.yml$/);
+      expect(call[1]?.searchPlaces[1]).toBe('.github-runners.yml');
+      expect(call[1]?.loaders).toMatchObject({
+        '.yml': expect.any(Function),
+        '.yaml': expect.any(Function),
       });
     });
   });
