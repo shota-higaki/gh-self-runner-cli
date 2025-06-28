@@ -4,9 +4,16 @@ import { PATHS } from './paths.js';
 /**
  * Ensure the .gitignore file contains the self-hosted-runners directory
  */
-export async function ensureGitignore(): Promise<void> {
+export async function ensureGitignore(additionalPatterns: string[] = []): Promise<void> {
   const gitignorePath = '.gitignore';
-  const ignorePattern = `${PATHS.BASE_DIR}/`;
+  const patterns = [
+    ...(PATHS.BASE_DIR.startsWith('.') ? [`${PATHS.BASE_DIR}/`] : []),
+    ...additionalPatterns,
+  ];
+
+  if (patterns.length === 0) {
+    return;
+  }
 
   try {
     // Read existing .gitignore content
@@ -17,17 +24,21 @@ export async function ensureGitignore(): Promise<void> {
       // File doesn't exist, we'll create it
     }
 
-    // Check if the pattern is already in the file
+    // Check which patterns need to be added
     const lines = content.split('\n');
-    const hasPattern = lines.some(
-      (line) => line.trim() === ignorePattern || line.trim() === PATHS.BASE_DIR,
+    const patternsToAdd = patterns.filter(
+      (pattern) =>
+        !lines.some(
+          (line) => line.trim() === pattern || line.trim() === pattern.replace(/\/$/, ''),
+        ),
     );
 
-    if (!hasPattern) {
-      // Add the pattern
+    if (patternsToAdd.length > 0) {
+      // Add the patterns
+      const newPatterns = patternsToAdd.join('\n');
       const newContent = content.trim()
-        ? `${content.trim()}\n\n# GitHub self-hosted runners\n${ignorePattern}\n`
-        : `# GitHub self-hosted runners\n${ignorePattern}\n`;
+        ? `${content.trim()}\n\n# GitHub self-hosted runners\n${newPatterns}\n`
+        : `# GitHub self-hosted runners\n${newPatterns}\n`;
 
       await fs.writeFile(gitignorePath, newContent);
     }

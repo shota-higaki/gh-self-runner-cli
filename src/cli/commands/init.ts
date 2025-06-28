@@ -4,6 +4,11 @@ import color from 'picocolors';
 import { GitHubClient } from '../../lib/github/index.js';
 import { RunnerManager } from '../../lib/runner/index.js';
 import { RunnerSetup } from '../../lib/runner/runner-setup.js';
+import {
+  ensureConfigDirectory,
+  getDefaultConfigDirectory,
+  storeConfigDirectoryReference,
+} from '../../utils/config-directory.js';
 import { writeConfigFile } from '../../utils/fs-helpers.js';
 import { ensureGitignore, getPlatformInfo, PATHS } from '../../utils/index.js';
 import { logger } from '../../utils/logger.js';
@@ -38,6 +43,28 @@ export const initCommand = new Command('init')
       p.intro(color.cyan('GitHub Self-Hosted Runner CLI - Initialize Repository'));
 
       const repo = await promptForRepository('Which repository do you want to configure?');
+
+      // Prompt for config directory
+      const defaultConfigDir = getDefaultConfigDirectory();
+      const configDir = await p.text({
+        message: 'Where should the configuration be stored?',
+        placeholder: defaultConfigDir,
+        initialValue: defaultConfigDir,
+        validate(value) {
+          if (!value || value.trim() === '') {
+            return 'Configuration directory is required';
+          }
+          return;
+        },
+      });
+
+      checkCancel(configDir);
+
+      // Ensure the config directory exists
+      ensureConfigDirectory(configDir.trim());
+
+      // Store reference to config directory in current working directory
+      storeConfigDirectoryReference(configDir.trim());
 
       const token = await getValidatedGitHubToken();
       const type = token.startsWith('gho_') ? 'github-cli' : 'pat';
@@ -129,7 +156,8 @@ logging:
   level: info
 `;
       await writeConfigFile(PATHS.CONFIG_FILE, configContent);
-      await ensureGitignore();
+      // Add the reference file to gitignore
+      await ensureGitignore(['.github-self-runner-config']);
 
       spinner.stop('Setup completed successfully');
 
